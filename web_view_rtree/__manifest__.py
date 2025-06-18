@@ -5,7 +5,7 @@
 {
     "name": "RTree View",
     "summary": "Add an rtree view type",
-    "version": "16.0.0.1.0",
+    "version": "17.0.1.0.0",
     "category": "Web",
     "website": "https://github.com/OCA/web",
     "author": "Coop IT Easy SC, Odoo Community Association (OCA)",
