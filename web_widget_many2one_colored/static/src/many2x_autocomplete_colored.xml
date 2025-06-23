@@ -7,7 +7,7 @@
         t-inherit-mode="primary"
         owl="1"
     >
-        <xpath expr="//input[@t-if='env.isSmall']" position="attributes">
+        <xpath expr="//input[@t-if='env.isSmall and props.dropdown']" position="attributes">
             <attribute
                 name="t-attf-class"
             >o_input o_many2one_colored_item_color_{{ props.color }}</attribute>
