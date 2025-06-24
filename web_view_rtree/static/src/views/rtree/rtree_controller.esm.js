@@ -1,7 +1,7 @@
 /** @odoo-module */
 
 import {ListController} from "@web/views/list/list_controller";
-import {useModel} from "@web/views/model";
+import {useModel} from "@web/model/model";
 import {useRef} from "@odoo/owl";
 import {useService} from "@web/core/utils/hooks";
 import {useSetupView} from "@web/views/view_hook";

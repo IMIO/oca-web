@@ -1,6 +1,8 @@
 /** @odoo-module */
 
-import {DynamicRecordList, Record, RelationalModel} from "@web/views/relational_model";
+import {RelationalModel} from "@web/model/relational_model/relational_model";
+import {DynamicRecordList} from "@web/model/relational_model/dynamic_record_list";
+import {Record} from "@web/model/record";
 import {InvalidDomainError} from "@web/core/domain";
 import {WarningDialog} from "@web/core/errors/error_dialogs";
 
