@@ -5,7 +5,7 @@
 {
     "name": "Colored Many2one field widget",
     "summary": "Display Many2one fields using a color field of their model",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Web",
     "website": "https://github.com/OCA/web",
     "author": "Coop IT Easy SC, Odoo Community Association (OCA)",
