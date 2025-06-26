@@ -399,7 +399,7 @@ class DynamicRTreeRecordList extends DynamicRecordList {
             this.model.errorDialog(
                 this.model.env._t("Error"),
                 this.model.env._t(
-                    "It is not possible to reparent records in a tree view."
+                    "It is not possible to reparent records in a list view."
                 )
             );
             return;
@@ -783,7 +783,7 @@ export class RTreeModel extends RelationalModel {
             this.errorDialog(
                 this.env._t("Error"),
                 this.env._t(
-                    "This type of search domain is not supported in a tree view."
+                    "This type of search domain is not supported in a list view."
                 )
             );
             return;
