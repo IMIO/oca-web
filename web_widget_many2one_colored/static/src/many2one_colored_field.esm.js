@@ -2,7 +2,7 @@
 
 import {onWillStart, onWillUpdateProps} from "@odoo/owl";
 
-import {Many2OneField} from "@web/views/fields/many2one/many2one_field";
+import {many2oneField, Many2OneField} from "@web/views/fields/many2one/many2one_field";
 import {Many2XAutocompleteColored} from "./many2x_autocomplete_colored.esm";
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
@@ -19,6 +19,10 @@ function resIDFromProps(props) {
 }
 
 export class Many2OneColoredField extends Many2OneField {
+    static template = "web_widget_many2one_colored.Many2OneColoredField";
+    static components = {
+        Many2XAutocompleteColored,
+    };
     setup() {
         super.setup();
         this.orm = useService("orm");
@@ -62,9 +66,10 @@ export class Many2OneColoredField extends Many2OneField {
     }
 }
 
-Many2OneColoredField.template = "web_widget_many2one_colored.Many2OneColoredField";
-Many2OneColoredField.components = {
-    Many2XAutocompleteColored,
+export const many2oneColoredField = {
+    ...many2oneField,
+    component: Many2OneColoredField,
+    extractProps: Many2OneColoredField.extractProps,
 };
 // This needs to be dynamic, because other modules like web_m2x_options modify
 // Many2OneField.props after this.
@@ -83,4 +88,4 @@ Many2OneColoredField.extractProps = ({attrs, field}) => {
     };
 };
 
-registry.category("fields").add("many2one_colored", Many2OneColoredField);
+registry.category("fields").add("many2one_colored", many2oneColoredField);
