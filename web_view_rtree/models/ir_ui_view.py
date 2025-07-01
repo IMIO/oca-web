@@ -13,5 +13,8 @@ class IrUiView(models.Model):
         ondelete={"rtree": "cascade"},
     )
 
+    def _get_view_info(self):
+        return {"rtree": {"icon": "fa fa-folder-tree"}} | super()._get_view_info()
+
     def _onchange_able_view_rtree(self, node):
         return True
