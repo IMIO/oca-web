@@ -4,6 +4,12 @@ import {AutoCompleteColored} from "./autocomplete_colored.esm";
 import {Many2XAutocomplete} from "@web/views/fields/relational_utils";
 
 export class Many2XAutocompleteColored extends Many2XAutocomplete {
+    static props = {
+        ...Many2XAutocomplete.props,
+        colorField: {type: String, optional: true},
+        color: {type: Number, optional: true},
+    };
+
     get optionsSource() {
         return {
             ...super.optionsSource,
