@@ -8,7 +8,7 @@
         owl="1"
     >
         <xpath
-            expr="t[@t-if='props.readonly']/t[@t-if='!props.canOpen']/span"
+            expr="//t[@t-if='props.readonly']//span"
             position="attributes"
         >
             <attribute

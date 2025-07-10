@@ -1,6 +1,6 @@
 /** @odoo-module */
 
-import {onWillStart, onWillUpdateProps} from "@odoo/owl";
+import {onWillStart, onWillUpdateProps, useState} from "@odoo/owl";
 
 import {many2oneField, Many2OneField} from "@web/views/fields/many2one/many2one_field";
 import {Many2XAutocompleteColored} from "./many2x_autocomplete_colored.esm";
@@ -12,10 +12,11 @@ const COLOR_FIELD_OPTION_NAME = "color_field";
 const NO_COLOR = 0;
 
 function resIDFromProps(props) {
-    if (!props.value) {
+    const value = "value" in props ? props.value : props.record.data[props.name];
+    if (!value) {
         return null;
     }
-    return props.value[0];
+    return value[0];
 }
 
 export class Many2OneColoredField extends Many2OneField {
@@ -27,7 +28,7 @@ export class Many2OneColoredField extends Many2OneField {
         super.setup();
         this.orm = useService("orm");
         this._colorField = this.props.colorField || DEFAULT_COLOR_FIELD;
-        this._color = NO_COLOR;
+        this.state.color = NO_COLOR;
         this._currentID = null;
 
         onWillStart(() => {
@@ -54,15 +55,15 @@ export class Many2OneColoredField extends Many2OneField {
         }
         this._currentID = resID;
         if (resID === null) {
-            this._color = NO_COLOR;
+            this.state.color = NO_COLOR;
             return;
         }
         const records = await this.orm.read(this.relation, [resID], [this._colorField]);
-        this._color = records[0][this._colorField];
+        this.state.color = records[0][this._colorField];
     }
 
-    get color() {
-        return this._color;
+    get _color() {
+        return this.state.color;
     }
 }
 

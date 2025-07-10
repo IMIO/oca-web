@@ -17,6 +17,27 @@ export class Many2XAutocompleteColored extends Many2XAutocomplete {
         };
     }
 
+    setup() {
+        super.setup();
+        this._color = this.props.color;
+    }
+
+    get inputClass() {
+        return `o-autocomplete--input o_input o_many2one_colored_item_color_${
+            this._color || 0
+        }`;
+    }
+
+    onInput(value) {
+        this._color = 0;
+        return super.onInput(value);
+    }
+
+    onSelect(option, params) {
+        this._color = option.color;
+        return super.onSelect(option, params);
+    }
+
     async loadOptionsSource(request) {
         const result = await super.loadOptionsSource(request);
         const ids = [];
