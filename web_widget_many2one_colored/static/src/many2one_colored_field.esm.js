@@ -40,12 +40,12 @@ export class Many2OneColoredField extends Many2OneField {
     }
 
     get Many2XAutocompleteProps() {
-        const props = super.Many2XAutocompleteProps;
-        Object.assign(props, {
+        const base = super.Many2XAutocompleteProps;
+        return {
+            ...base,
             colorField: this._colorField,
             color: this._color,
-        });
-        return props;
+        };
     }
 
     async loadColor(resID) {
