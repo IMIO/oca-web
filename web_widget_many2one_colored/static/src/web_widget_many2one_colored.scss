@@ -1,8 +1,8 @@
 // set all the colors but the "no-color" one
 @for $size from 2 through length($o-colors) {
-    .o_many2one_colored_item_color_#{$size - 1},
-    .o_many2one_colored_item_color_#{$size - 1} > span,
-    .o_field_widget input.o_many2one_colored_item_color_#{$size - 1} {
+    .o_form_view .o_many2one_colored_item_color_#{$size - 1},
+    .o_form_view .o_many2one_colored_item_color_#{$size - 1} > span,
+    .o_form_view input.o_many2one_colored_item_color_#{$size - 1} {
         color: nth($o-colors, $size) !important;
     }
 }
