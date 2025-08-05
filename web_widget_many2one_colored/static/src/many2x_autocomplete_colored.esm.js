@@ -50,11 +50,15 @@ export class Many2XAutocompleteColored extends Many2XAutocomplete {
             ids.push(option.value);
             idToIndex[option.value] = i;
         }
-        const records = await this.orm.read(this.props.resModel, ids, [
-            this.props.colorField,
-        ]);
-        for (const record of records) {
-            result[idToIndex[record.id]].color = record[this.props.colorField];
+        if (ids.length) {
+            const records = await this.orm.read(this.props.resModel, ids, [
+                this.props.colorField,
+            ]);
+            for (const record of records) {
+                if (idToIndex[record.id] !== undefined) {
+                    result[idToIndex[record.id]].color = record[this.props.colorField] || 0;
+                }
+            }
         }
         return result;
     }
