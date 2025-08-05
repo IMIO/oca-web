@@ -2,11 +2,7 @@
 
 import {AutoComplete} from "@web/core/autocomplete/autocomplete";
 
-const NO_COLOR = 0;
-
-export class AutoCompleteColored extends AutoComplete {
-    
-}
+export class AutoCompleteColored extends AutoComplete {}
 
 AutoCompleteColored.template = "web_widget_many2one_colored.AutoCompleteColored";
 AutoCompleteColored.props = {
