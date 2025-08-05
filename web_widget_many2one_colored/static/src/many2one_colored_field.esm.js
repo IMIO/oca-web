@@ -30,12 +30,16 @@ export class Many2OneColoredField extends Many2OneField {
         this._colorField = this.props.colorField || DEFAULT_COLOR_FIELD;
         this.state.color = NO_COLOR;
         this._currentID = null;
-
+        console.log("Many2OneColoredField colorfield", this._colorField);
+        console.log("Many2OneColoredField _currentID", this._currentID);
+        console.log("Many2oneField.props", Many2OneField.props);
         onWillStart(() => {
+            console.log("onWillStart", this.props);
             return this.loadColor(resIDFromProps(this.props));
         });
 
         onWillUpdateProps((nextProps) => {
+            console.log("onWillUpdateProps", nextProps);
             return this.loadColor(resIDFromProps(nextProps));
         });
     }
@@ -60,6 +64,7 @@ export class Many2OneColoredField extends Many2OneField {
         }
         const records = await this.orm.read(this.relation, [resID], [this._colorField]);
         this.state.color = records[0][this._colorField];
+        console.log("loadColor:", this.state);
     }
 
     get _color() {
@@ -75,6 +80,7 @@ export const many2oneColoredField = {
 // This needs to be dynamic, because other modules like web_m2x_options modify
 // Many2OneField.props after this.
 Object.defineProperty(Many2OneColoredField, "props", {
+
     get: () => {
         return {
             ...Many2OneField.props,
