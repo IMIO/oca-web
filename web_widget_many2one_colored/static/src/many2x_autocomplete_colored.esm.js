@@ -10,11 +10,11 @@ export class Many2XAutocompleteColored extends Many2XAutocomplete {
         color: {type: Number, optional: true},
     };
 
+    // Use our custom template
     get optionsSource() {
-        return {
-            ...super.optionsSource,
-            optionTemplate: "web_widget_many2one_colored.AutoCompleteColoredOption",
-        };
+        const src = Object.create(super.optionsSource);
+        src.optionTemplate = "web_widget_many2one_colored.AutoCompleteColoredOption";
+        return src;
     }
 
     setup() {
@@ -38,25 +38,30 @@ export class Many2XAutocompleteColored extends Many2XAutocomplete {
         return super.onSelect(option, params);
     }
 
+    // Called when the dropdown needs to load its options
     async loadOptionsSource(request) {
         const result = await super.loadOptionsSource(request);
         const ids = [];
         const idToIndex = {};
+        // Get the ids for items in the dropdown
         for (let i = 0; i < result.length; ++i) {
             const option = result[i];
-            if (option.value === undefined) {
-                break;
-            }
+            // If the current option's value is undefined,
+            // we are past the end of the data, and the row
+            // is a "Create..." or similar row, we are done.
+            if (option.value === undefined) break;
             ids.push(option.value);
             idToIndex[option.value] = i;
         }
         if (ids.length) {
+            // Read colors in one ORM call
             const records = await this.orm.read(this.props.resModel, ids, [
                 this.props.colorField,
             ]);
-            for (const record of records) {
-                if (idToIndex[record.id] !== undefined) {
-                    result[idToIndex[record.id]].color = record[this.props.colorField] || 0;
+            for (const rec of records) {
+                const idx = idToIndex[rec.id];
+                if (idx !== undefined) {
+                    result[idx].color = rec[this.props.colorField] || 0;
                 }
             }
         }
@@ -66,6 +71,4 @@ export class Many2XAutocompleteColored extends Many2XAutocomplete {
 
 Many2XAutocompleteColored.template =
     "web_widget_many2one_colored.Many2XAutocompleteColored";
-Many2XAutocompleteColored.components = {
-    AutoCompleteColored,
-};
+Many2XAutocompleteColored.components = {AutoCompleteColored};

@@ -1,8 +1,7 @@
 /** @odoo-module */
 
-import {onWillStart, onWillUpdateProps, useState} from "@odoo/owl";
-
-import {many2oneField, Many2OneField} from "@web/views/fields/many2one/many2one_field";
+import {onWillStart, onWillUpdateProps} from "@odoo/owl";
+import {Many2OneField} from "@web/views/fields/many2one/many2one_field";
 import {Many2XAutocompleteColored} from "./many2x_autocomplete_colored.esm";
 import {registry} from "@web/core/registry";
 import {useService} from "@web/core/utils/hooks";
@@ -13,30 +12,39 @@ const NO_COLOR = 0;
 
 function resIDFromProps(props) {
     const value = "value" in props ? props.value : props.record.data[props.name];
-    if (!value) {
-        return null;
-    }
-    return value[0];
+    return value ? value[0] : null;
 }
 
 export class Many2OneColoredField extends Many2OneField {
     static template = "web_widget_many2one_colored.Many2OneColoredField";
-    static components = {
-        Many2XAutocompleteColored,
-    };
+    static components = {Many2XAutocompleteColored};
+
+    // Keep dynamic so late patches to Many2OneField.props are seen
+    static get props() {
+        return {
+            ...Many2OneField.props,
+            colorField: {type: String, optional: true},
+        };
+    }
+
+    static extractProps(params, dynamicInfo) {
+        const base = super.extractProps(params, dynamicInfo);
+        const opts = params.options ?? params.attrs?.options;
+        return {
+            ...base,
+            colorField: opts[COLOR_FIELD_OPTION_NAME] ?? DEFAULT_COLOR_FIELD,
+        };
+    }
+
     setup() {
         super.setup();
         this.orm = useService("orm");
         this._colorField = this.props.colorField || DEFAULT_COLOR_FIELD;
         this.state.color = NO_COLOR;
         this._currentID = null;
-        onWillStart(() => {
-            return this.loadColor(resIDFromProps(this.props));
-        });
 
-        onWillUpdateProps((nextProps) => {
-            return this.loadColor(resIDFromProps(nextProps));
-        });
+        onWillStart(() => this.loadColor(resIDFromProps(this.props)));
+        onWillUpdateProps((nextProps) => this.loadColor(resIDFromProps(nextProps)));
     }
 
     get Many2XAutocompleteProps() {
@@ -49,10 +57,9 @@ export class Many2OneColoredField extends Many2OneField {
     }
 
     async loadColor(resID) {
-        if (resID === this._currentID) {
-            return;
-        }
+        if (resID === this._currentID) return;
         this._currentID = resID;
+
         if (resID === null) {
             this.state.color = NO_COLOR;
             return;
@@ -66,27 +73,10 @@ export class Many2OneColoredField extends Many2OneField {
     }
 }
 
-export const many2oneColoredField = {
-    ...many2oneField,
+// Copy the live base entry from the registry to keep supportedTypes/isEmptyValue/etc.
+const baseMany2oneEntry = registry.category("fields").get("many2one");
+
+registry.category("fields").add("many2one_colored", {
+    ...baseMany2oneEntry,
     component: Many2OneColoredField,
-    extractProps: Many2OneColoredField.extractProps,
-};
-// This needs to be dynamic, because other modules like web_m2x_options modify
-// Many2OneField.props after this.
-Object.defineProperty(Many2OneColoredField, "props", {
-
-    get: () => {
-        return {
-            ...Many2OneField.props,
-            colorField: {type: String, optional: true},
-        };
-    },
 });
-Many2OneColoredField.extractProps = ({attrs, field}) => {
-    return {
-        ...Many2OneField.extractProps({attrs, field}),
-        colorField: attrs.options[COLOR_FIELD_OPTION_NAME],
-    };
-};
-
-registry.category("fields").add("many2one_colored", many2oneColoredField);
